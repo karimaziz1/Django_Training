@@ -4,13 +4,18 @@ from django.core.validators import MaxLengthValidator,MinLengthValidator,RegexVa
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-class user(AbstractUser):
+class User(AbstractUser):
     pass
 class Speciality(models.Model):
     name =models.CharField(max_length=255)
     created_at =models.DateTimeField(auto_now=True)
     update_at=models.DateTimeField(auto_now=True)
     
+    class meta:
+        verbose_name="Specialty"
+        verbose_name="Specialites"
+        def __str__(self):
+            return self.name
 class Doctor(User):
 
     license_number=models.CharField(max_length=6 , unique=True,validators=[MinLengthValidator(6),MaxLengthValidator(6)])
@@ -19,7 +24,9 @@ class Doctor(User):
     update_at=models.DateTimeField(auto_now=True)
    # specialtie=models.ManyToManyField("AccountApp.Specialtie")
     specialties=models.ManyToManyField(Speciality , related_name="doctors")
-    
+    class meta:
+            verbose_name="Doctor"
+            verbose_name_plural="Doctors"
 NumberValidator=RegexValidator(
     regex=r'^\d{8}$',
     message="this number must contain 8 digits"
@@ -34,4 +41,8 @@ class Patient(User):
     birth_date=models.DateField(validators=[validate_birth])
     created_at =models.DateTimeField(auto_now=True)
     update_at=models.DateTimeField(auto_now=True)
-    
+    class meta:
+        
+        verbose_name="Patient"
+        verbose_name_plural="patients"
+   
